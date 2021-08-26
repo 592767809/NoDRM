@@ -18,7 +18,7 @@ from Cryptodome.Hash import CMAC, SHA256, HMAC, SHA1
 from Cryptodome.PublicKey import RSA
 from Cryptodome.Signature import pss
 from Cryptodome.Util import Padding
-from Crypto.Util.number import bytes_to_long,long_to_bytes
+from Cryptodome.Util.number import bytes_to_long, long_to_bytes
 from pywidevine.cdm import cdmapi
 import logging
 
@@ -134,6 +134,8 @@ class Cdm:
 
 
     def sign_license_request(self,data):
+        print(data)
+        print((pss._EMSA_PSS_ENCODE(data,2047,Random.get_random_bytes,lambda x, y: pss.MGF1(x, y, data),20)))
         em=binascii.b2a_hex((pss._EMSA_PSS_ENCODE(data,2047,Random.get_random_bytes,lambda x, y: pss.MGF1(x, y, data),20)))
         sig=cdmapi.encrypt(em.decode('utf-8'))
         return (binascii.a2b_hex(sig))
